@@ -1,6 +1,7 @@
 package com.anjanik012.suto.DataBase;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -48,5 +49,14 @@ public class Host {
 
     public void setPassWord(@NonNull String passWord) {
         this.passWord = passWord;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof Host && obj != null) {
+            Host host = (Host) obj;
+            return this.hostName.equals(host.getHostName());
+        }
+        return false;
     }
 }

@@ -1,16 +1,12 @@
 package com.anjanik012.suto.DataBase;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HostRepository {
 
@@ -20,6 +16,10 @@ public class HostRepository {
     private HostDao dao;
     private LiveData<List<Host>> hostNames;
 //    private HashMap<String, String> hostNameCache;
+
+    public interface InsertCallback{
+        void insertHostCallback(boolean result);
+    }
 
     public static HostRepository getInstance(Application application) {
         if(instance == null) {
@@ -60,7 +60,22 @@ public class HostRepository {
     // Run on Non UI Thread
     public void insert(Host host) {
         HostDatabase.databaseWriteExecutor.execute(()->{
-            dao.insert(host);
+            Host h = dao.getHost(host.getHostName());
+            if(h == null || !h.equals(host)) {
+                dao.insert(host);
+            }
+        });
+    }
+
+    public void insert(Host host, InsertCallback callback) {
+        HostDatabase.databaseWriteExecutor.execute(()->{
+            Host h = dao.getHost(host.getHostName());
+            if (h == null || !h.equals(host)) {
+                dao.insert(host);
+                callback.insertHostCallback(true);
+            } else {
+                callback.insertHostCallback(false);
+            }
         });
     }
 

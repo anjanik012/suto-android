@@ -22,7 +22,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class HostDialogFragment extends DialogFragment {
+public class HostDialogFragment extends DialogFragment implements HostRepository.InsertCallback{
     private TextInputEditText userName;
     private TextInputEditText hostName;
     private TextInputEditText passWord;
@@ -49,15 +49,24 @@ public class HostDialogFragment extends DialogFragment {
             String pass = passWord.getText().toString();
             if (!StringUtils.isBlank(user) && !StringUtils.isBlank(host) && !StringUtils.isBlank(pass)) {
                 Host h = new Host(user+"@"+host, pass, null);
-                HostRepository.getInstance(activity.getApplication()).insert(h);
-                dismiss();
+                HostRepository.getInstance(activity.getApplication()).insert(h, this);
             } else {
-                Toast.makeText(activity, "Empty field", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Empty field", Toast.LENGTH_SHORT).show();
             }
         });
         cancelButton.setOnClickListener(v -> {
             dismiss();
         });
         return builder.create();
+    }
+
+    // Toast has to run on UI Thread.
+    @Override
+    public void insertHostCallback(boolean result) {
+        if (result) {
+            dismiss();
+        } else {
+            getActivity().runOnUiThread(() -> Toast.makeText(getContext(), R.string.host_already_present, Toast.LENGTH_SHORT).show());
+        }
     }
 }
