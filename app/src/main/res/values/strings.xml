@@ -10,4 +10,6 @@
     <string name="undo_delete_item">Undo</string>
     <string name="host_list_empty">No hosts added</string>
     <string name="host_already_present">Host already present. Add another host</string>
+
+    <string name="foreground_notification_msg">Listening for authentication requests</string>
 </resources>

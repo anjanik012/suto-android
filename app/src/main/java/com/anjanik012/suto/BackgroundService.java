@@ -79,8 +79,7 @@ public class BackgroundService extends LifecycleService {
         Notification.Builder builder = new Notification.Builder(this, NOTIFICATION_CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_notif_white)
                 .setContentIntent(pendingIntent)
-                .setContentTitle("SUTO")
-                .setContentText("Listening for UDP")
+                .setContentText(getText(R.string.foreground_notification_msg))
                 .setPriority(Notification.PRIORITY_LOW)
                 .setCategory(Notification.CATEGORY_SERVICE);
         return builder.build();
