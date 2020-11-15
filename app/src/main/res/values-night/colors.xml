@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#14213d</color>
+    <color name="primary_variant">#14215d</color>
+    <color name="secondary">#fca311</color>
+    <color name="secondary_variant">#CB7E00</color>
+    <color name="black">#000000</color>
+    <color name="white">#e5e5e5</color>
+    <color name="bg_color">#0D1527</color>
+    <color name="card_bg_color">#14213d</color>
+    <color name="button_text_color">#fca311</color>
+</resources>

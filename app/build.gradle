@@ -38,9 +38,20 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     // Apache commons lang for StringUtils
-    implementation 'org.apache.commons:commons-lang3:3.11'
+    def commons_lang_version = "3.11"
+    implementation "org.apache.commons:commons-lang3:$commons_lang_version"
 
     // Apache commons codec for crypt library
-    implementation 'commons-codec:commons-codec:1.15'
+    def commons_codec_version = "1.15"
+    implementation "commons-codec:commons-codec:$commons_codec_version"
+
+    // Room Database
+    def room_version = "2.2.5"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // LifecycleService
+    def lifecycle_version = "2.2.0"
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
 
 }

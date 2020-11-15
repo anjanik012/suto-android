@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Suto</string>
+    <string name="user_name_hint">Username</string>
+    <string name="host_name_hint">Hostname</string>
+    <string name="password_hint">Password</string>
+    <string name="dialog_title">Add a host</string>
+    <string name="dialog_add">Add</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="host_deleted">Host deleted</string>
+    <string name="undo_delete_item">Undo</string>
+    <string name="host_list_empty">No hosts added</string>
 </resources>
