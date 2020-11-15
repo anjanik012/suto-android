@@ -77,7 +77,7 @@ public class BackgroundService extends LifecycleService {
         manager.createNotificationChannel(channel);
 
         Notification.Builder builder = new Notification.Builder(this, NOTIFICATION_CHANNEL_ID);
-        builder.setSmallIcon(R.drawable.ic_launcher_foreground)
+        builder.setSmallIcon(R.drawable.ic_notif_white)
                 .setContentIntent(pendingIntent)
                 .setContentTitle("SUTO")
                 .setContentText("Listening for UDP")
