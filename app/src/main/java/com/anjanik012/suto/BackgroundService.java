@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
@@ -14,6 +15,7 @@ import android.os.IBinder;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.LifecycleService;
 
 import com.anjanik012.suto.Backend.Protocol;
@@ -23,8 +25,10 @@ import com.anjanik012.suto.DataBase.Host;
 public class BackgroundService extends LifecycleService {
     private static final String TAG = "BackgroundService";
     public static final int FOREGROUND_NOTIFICATION_ID = 255;
+    public static final String AUTH_CANCEL_ACTION = "com.anjanik012.suto.AUTH_CANCEL";
 
     private SutoConnection connection;
+    private AuthenticationCancelReceiver authenticationCancelReceiver;
 
     @Override
     public void onCreate() {
@@ -36,11 +40,11 @@ public class BackgroundService extends LifecycleService {
         }
 
         connection = SutoConnection.getInstance(getApplication());
-        connection.setTCPConnectionCallBack(host -> {
-                 Protocol protocol = new Protocol(getApplication(), host);
-                 protocol.init();
-        });
         connection.start();
+        authenticationCancelReceiver = new AuthenticationCancelReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(AUTH_CANCEL_ACTION);
+        registerReceiver(authenticationCancelReceiver, filter);
     }
 
     @Override
@@ -60,23 +64,17 @@ public class BackgroundService extends LifecycleService {
         super.onDestroy();
         stopForeground(true);
         connection.stop();
+        unregisterReceiver(authenticationCancelReceiver);
         stopSelf();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     Notification createNotification() {
-        String NOTIFICATION_CHANNEL_ID = "com.anjanik012.suto";
-        String CHANNEL_NAME = "ForegroundService";
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent =
                 PendingIntent.getActivity(this, 0, notificationIntent, 0);
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
-        channel.setLightColor(Color.BLUE);
-        channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.createNotificationChannel(channel);
-
-        Notification.Builder builder = new Notification.Builder(this, NOTIFICATION_CHANNEL_ID);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
+                NotificationChannelsManager.foregroundChannelId);
         builder.setSmallIcon(R.drawable.ic_notif_white)
                 .setContentIntent(pendingIntent)
                 .setContentText(getText(R.string.foreground_notification_msg))

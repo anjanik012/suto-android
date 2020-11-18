@@ -54,4 +54,8 @@ dependencies {
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
 
+    // Biometric
+    def biometric_version = "1.0.1"
+    implementation "androidx.biometric:biometric:$biometric_version"
+
 }

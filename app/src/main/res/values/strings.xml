@@ -14,4 +14,7 @@
     <string name="bkg_service">Background Service</string>
 
     <string name="foreground_notification_msg">Listening for authentication requests</string>
+    <string name="authentication_notif_title">New authentication request</string>
+    <string name="authentication_notif_auth">Authenticate</string>
+    <string name="authentication_notif_cancel">Cancel</string>
 </resources>
