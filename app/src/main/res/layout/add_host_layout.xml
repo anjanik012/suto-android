@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     style="@style/Theme.Suto"
-    android:background="@color/card_bg_color"
+    android:background="@drawable/textfield"
     android:orientation="vertical">
 
     <TextView
@@ -14,9 +14,12 @@
         android:layout_margin="8dp"
         android:text="@string/dialog_title"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textAlignment="center"/>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:id="@+id/username_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,8 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/bg_color"
-            android:layout_margin="4dp"
-            android:hint="@string/user_name_hint"/>
+            android:hint="@string/user_name_hint" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -36,6 +38,8 @@
         android:id="@+id/hostname_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -49,6 +53,8 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:id="@+id/password_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -70,25 +76,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/dialog_cancel_button"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:textColor="@color/secondary"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_cancel"
+            android:layout_marginLeft="10dp"/>
         <Space
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/dialog_cancel_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:textColor="@color/button_text_color"
-            android:layout_height="wrap_content"
-            android:text="@string/dialog_cancel" />
-
-        <Button
             android:id="@+id/dialog_add_button"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
-            android:textColor="@color/button_text_color"
+            android:textColor="@color/secondary"
             android:layout_height="wrap_content"
-            android:text="@string/dialog_add" />
+            android:text="@string/dialog_add"
+            android:layout_marginRight="10dp"/>
     </LinearLayout>
 </LinearLayout>
