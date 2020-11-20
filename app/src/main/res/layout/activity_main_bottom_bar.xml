@@ -40,7 +40,7 @@
 
 
         <TextView
-            android:text="Suto PAM Authenticator"
+            android:text="@string/suto_pam_auth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -66,14 +66,15 @@
                 android:layout_marginRight="18dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:gravity="left"
+                android:gravity="start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:text="Background Service"
-                    android:paddingLeft="10dp"
+                    android:text="@string/bkg_service"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
