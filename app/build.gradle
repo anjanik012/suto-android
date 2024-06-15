@@ -3,17 +3,21 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    compileSdk 34
+    namespace "com.anjanik012.suto"
 
     defaultConfig {
         applicationId "com.anjanik012.suto"
         minSdkVersion 23
-        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -46,7 +50,7 @@ dependencies {
     implementation "commons-codec:commons-codec:$commons_codec_version"
 
     // Room Database
-    def room_version = "2.2.5"
+    def room_version = "2.6.1"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
