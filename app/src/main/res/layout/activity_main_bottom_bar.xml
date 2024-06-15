@@ -50,43 +50,6 @@
             android:layout_gravity="center_horizontal"/>
 
         <!--    test-->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_marginTop="50dp"
-
-            app:cardCornerRadius="12dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/card_bg_color"
-            android:layout_gravity="center_horizontal">
-
-
-
-            <LinearLayout
-                android:layout_marginLeft="18dp"
-                android:layout_marginRight="18dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:gravity="start"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:text="@string/bkg_service"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="0dp"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="17sp"
-                    android:alpha="0.9"
-                    android:textStyle="normal" />
-
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
 
