@@ -64,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager manager = getSupportFragmentManager();
             dialogFragment.show(manager, "Dialog");
         });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannelsManager.getInstance(this);
+        }
         Intent intent = new Intent(this, BackgroundService.class);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent);

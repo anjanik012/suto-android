@@ -10,39 +10,43 @@
     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
-        app:cardCornerRadius="12dp"
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/card_bg_color"
-        app:cardElevation="8dp"
         android:outlineAmbientShadowColor="@color/bg_color"
-        android:outlineSpotShadowColor="@color/bg_color">
+        android:outlineSpotShadowColor="@color/bg_color"
+        app:cardBackgroundColor="@color/card_bg_color"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="8dp">
         <!--        app:strokeColor="@color/secondary"-->
         <!--        app:strokeWidth="1dp"-->
 
 
         <LinearLayout
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <ImageView
 
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/adminicon"/>
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="right|center_vertical"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:src="@drawable/adminicon" />
 
             <LinearLayout
-                android:layout_marginLeft="20dp"
-                android:layout_width="200dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -51,32 +55,39 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
                     android:layout_weight="1"
+                    android:alpha="0.9"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="22sp"
-                    android:alpha="0.9"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/hostname"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
                     android:layout_weight="1"
-                    android:textSize="16sp"
-                    android:alpha="0.8"/>
+                    android:alpha="0.8"
+                    android:textSize="16sp" />
+
             </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="15dp"
-                android:layout_marginRight="5dp"
                 android:layout_gravity="center_vertical"
                 android:alpha=".4"
-                android:src="@drawable/arrow"/>
+                android:src="@drawable/arrow" />
+
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/deletewhite"/>
+                android:layout_gravity="center"
+                android:foregroundGravity="right"
+                android:src="@drawable/deletewhite" />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

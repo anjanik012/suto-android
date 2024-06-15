@@ -1,6 +1,7 @@
 package com.anjanik012.suto.DataBase;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -21,15 +22,15 @@ public class HostRepository {
         void insertHostCallback(boolean result);
     }
 
-    public static HostRepository getInstance(Application application) {
+    public static HostRepository getInstance(Context context) {
         if(instance == null) {
-            instance = new HostRepository(application);
+            instance = new HostRepository(context);
         }
         return instance;
     }
 
-    private HostRepository(Application application) {
-        database = HostDatabase.getInstance(application);
+    private HostRepository(Context context) {
+        database = HostDatabase.getInstance(context);
         dao = database.hostDao();
         hostNames = dao.getAll();
 //        hostNameCache = new HashMap<>();

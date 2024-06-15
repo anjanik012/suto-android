@@ -22,17 +22,12 @@ import javax.net.SocketFactory;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class SutoConnection  {
+public class SutoConnection {
     private static final String TAG = "SutoConnection";
 
     public enum States {
         INACTIVE, ACTIVE, HELLO, TCP_CONNECTED
     }
-
-    public interface TCPConnectionEstablished {
-        void tcpConnectionEstablished(Host host);
-    }
-    private TCPConnectionEstablished callBack;
 
     private boolean listening = false;
 
@@ -53,14 +48,15 @@ public class SutoConnection  {
 
     private Inet4Address clientAddr;
 
-    HostRepository repository;
+    private HostRepository repository;
+    private Protocol protocol;
 
-    public static SutoConnection getInstance(Application application) {
-        if(instance == null) {
+    public static SutoConnection getInstance(Context context) {
+        if (instance == null) {
             synchronized (SutoConnection.class) {
                 if (instance == null) {
                     try {
-                        instance = new SutoConnection(application);
+                        instance = new SutoConnection(context);
                     } catch (SocketException e) {
                         Log.e(TAG, "getInstance: Error in constructing SutoConnection object", e);
                     }
@@ -70,7 +66,7 @@ public class SutoConnection  {
         return instance;
     }
 
-    private SutoConnection(Application application) throws SocketException {
+    private SutoConnection(Context context) throws SocketException {
         udpSocket = new DatagramSocket(UDP_PORT);
         udpSocket.setReceiveBufferSize(BUFF_LENGTH);
         tcpSocket = null;
@@ -78,48 +74,46 @@ public class SutoConnection  {
         outputStream = null;
         buff = new byte[BUFF_LENGTH];
         currentState = States.INACTIVE;
-        repository = HostRepository.getInstance(application);
-    }
-
-    public void setTCPConnectionCallBack(TCPConnectionEstablished callBack) {
-        this.callBack = callBack;
+        repository = HostRepository.getInstance(context);
+        protocol = Protocol.getInstance(context);
     }
 
     public void start() {
         listening = true;
         DatagramPacket packet = new DatagramPacket(buff, BUFF_LENGTH);
-        new Thread(()->{
-            while(listening) {
-                currentState = States.ACTIVE;
-                Log.d(TAG, "run: Start UDP listening thread");
-                Log.d(TAG, "run: Thread ID:- " + Thread.currentThread().getId());
-                try {
-                    udpSocket.receive(packet);
-                    String msg = StringUtils.substringBefore(new String(packet.getData(), StandardCharsets.UTF_8), "+");
-                    Log.d(TAG, "run: UDP Message received:-" + msg);
-                    Host host = validateHelloMsg(msg);
-                    if (host != null) {
-                        // Host entry is in database;
-                        // Open TCP connection to the client
-                        SocketFactory socketFactory = SocketFactory.getDefault();
-                        try {
-                            clientAddr = (Inet4Address) packet.getAddress();
-                            tcpSocket = socketFactory.createSocket(clientAddr, TCP_PORT);
-                        } catch(ConnectException connectException) {
-                            Log.e(TAG, "start: suto client offline, this packet is probably an old packet...ignoring", connectException);
-                            continue;
+        new Thread(() -> {
+            while (listening) {
+                if (currentState != States.TCP_CONNECTED) {
+                    currentState = States.ACTIVE;
+                    Log.d(TAG, "run: Start UDP listening thread");
+                    Log.d(TAG, "run: Thread ID:- " + Thread.currentThread().getId());
+                    try {
+                        udpSocket.receive(packet);
+                        String msg = StringUtils.substringBefore(new String(packet.getData(), StandardCharsets.UTF_8), "+");
+                        Log.d(TAG, "run: UDP Message received:-" + msg);
+                        Host host = validateHelloMsg(msg);
+                        if (host != null) {
+                            // Host entry is in database;
+                            // Open TCP connection to the client
+                            SocketFactory socketFactory = SocketFactory.getDefault();
+                            try {
+                                clientAddr = (Inet4Address) packet.getAddress();
+                                tcpSocket = socketFactory.createSocket(clientAddr, TCP_PORT);
+                            } catch (ConnectException connectException) {
+                                Log.e(TAG, "start: suto client offline, this packet is probably an old packet...ignoring", connectException);
+                                continue;
+                            }
+                            if (tcpSocket.isConnected()) {
+                                currentState = States.TCP_CONNECTED;
+                                Log.d(TAG, "run: TCP Connection established");
+                                inputStream = tcpSocket.getInputStream();
+                                outputStream = tcpSocket.getOutputStream();
+                                protocol.init(host);
+                            }
                         }
-                        if (tcpSocket.isConnected()) {
-                            currentState = States.TCP_CONNECTED;
-                            Log.d(TAG, "run: TCP Connection established");
-                            inputStream = tcpSocket.getInputStream();
-                            outputStream = tcpSocket.getOutputStream();
-                            callBack.tcpConnectionEstablished(host);
-                            tcpSocket.close();
-                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "run: Error reading data from suto client", e);
                     }
-                } catch (IOException e) {
-                    Log.e(TAG, "run: Error reading data from suto client", e);
                 }
             }
         }).start();
@@ -171,11 +165,11 @@ public class SutoConnection  {
         }
         if (nBytes == 30 || nBytes == 11) {
             StringBuilder builder = new StringBuilder();
-            for(int i = 0; i < nBytes; i++) {
-                builder.append((char)msg[i]);
+            for (int i = 0; i < nBytes; i++) {
+                builder.append((char) msg[i]);
             }
             return builder.toString();
-        } else if(nBytes == 50) {
+        } else if (nBytes == 50) {
             return new String(msg, StandardCharsets.UTF_8);
         } else {
             Log.e(TAG, "waitForMsg: Invalid msg was read");
@@ -183,8 +177,18 @@ public class SutoConnection  {
         }
     }
 
+    public void setCurrentState(States state) {
+        synchronized (currentState) {
+            currentState = state;
+        }
+    }
+
     public void closeTCP() throws IOException {
-        tcpSocket.close();
+        synchronized (this) {
+            tcpSocket.close();
+            Log.d(TAG, "closeTCP: TCP Connection closed");
+            currentState = States.ACTIVE;
+        }
     }
 
     public States getCurrentState() {
